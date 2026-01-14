@@ -51,13 +51,14 @@
               <h1 class="title is-1 publication-title">$\small BiDexGrasp: High-Quality Data Synthesis and Diffusion-Based Generation of Bimanual Dexterous Grasps</h1>
               <div class="is-size-5 publication-authors">
                 <span class="author-block">
-                  <a href="https://zhenyuwei2003.github.io/">Haoliang Xu</a><sup>1</sup>,
+                  <!-- <a href="https://zhenyuwei2003.github.io/">Haoliang Xu</a><sup>1</sup>, -->
+                   <a href="">Haoliang Xu</a><sup>1</sup>,
                 </span>
                 <span class="author-block">
-                  <a href="https://ariszxxu.github.io/">Zexiang Guo</a><sup>2</sup>,
+                  <a href="">Zexiang Guo</a><sup>2</sup>,
                 </span>
                 <span class="author-block">
-                  <a href="https://chongkaigao.com/">Qiang Li</a><sup>2</sup>,
+                  <a href="">Qiang Li</a><sup>2</sup>,
                 </span>
               </div>
 
@@ -160,21 +161,11 @@
             <h2 class="title is-3">Abstract</h2>
             <div class="content has-text-justified">
               <p>
-                Dexterous grasping is a fundamental yet challenging skill in robotic manipulation, 
-                requiring precise interaction between robotic hands and objects. In this paper, we 
-                present $\mathcal{D(R,O)}$ Grasp, a novel framework that models the interaction 
-                between the robotic hand in its grasping pose and the object, enabling broad 
-                generalization across various robot hands and object geometries. Our model takes 
-                the robot hand's description and object point cloud as inputs and efficiently 
-                predicts kinematically valid and stable grasps, demonstrating strong adapt ability 
-                to diverse robot embodiments and object geometries. Extensive experiments conducted 
-                in both simulated and real world environments validate the effectiveness of our 
-                approach, with significant improvements in success rate, grasp diversity, and 
-                inference speed across multiple robotic hands. Our method achieves an average 
-                success rate of 87.53% in simulation in less than one second, tested on three 
-                different dexterous robotic hands, and also performs successfully in real-world 
-                experiments using LeapHand. $\mathcal{D(R,O)}$ Grasp provides a robust solution for 
-                dexterous grasping in complex and varied environments.
+                Dexterous grasping has advanced rapidly in recent years, yet bimanual manipulation for large‑scale objects remains underexplored due to the increased complexity of coordinating two hands while considering object geometry, environmental constraints, and potential hand‑hand conflicts. 
+                In this work, we propose an efficient method for generating high‑quality bimanual grasp datasets, which outperforms prior approaches in both generation speed and success rate. 
+                Using this pipeline, we generate and physically validate 5.3 million successful bimanual grasp pairs. 
+                Furthermore, we develop a diffusion‑based model trained on this synthetic dataset to infer feasible bimanual grasp poses from partial object point clouds. 
+                This model achieves a 80.7\% success rate in simulator based on partial point cloud and 46.3\% in real experiments.
               </p>
             </div>
           </div>
@@ -185,7 +176,7 @@
 
     <section class="section">
       <div class="container is-max-desktop">
-        <!-- Overview -->
+        <!-- Dataset Generation Pipeline -->
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
             <h2 class="title is-3">Dataset Generation Pipeline</h2>
@@ -197,7 +188,7 @@
             </figure>
           </div>
         </div>
-        <!--/ Overview -->
+        <!--/ Dataset Generation Pipeline -->
       </div>
     </section>
 
@@ -206,7 +197,7 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column">
-            <h2 class="title is-3 has-text-centered">Simulation Grasps</h2>
+            <h2 class="title is-3 has-text-centered">Bimanual Grasp Dataset</h2>
           </div>
         </div>
 
@@ -370,7 +361,7 @@
       </div>
     </section> -->
 
-    <script>
+    <!-- <script>
       const modelViewer_mesh = document.getElementById('modelViewer_mesh');
       const modelViewer_pc = document.getElementById('modelViewer_pc');
       const robotNameSelectP = document.getElementById('robotNameP');
@@ -385,8 +376,28 @@
       }
       robotNameSelectP.addEventListener('change', updateModel);
       objectNameSelectP.addEventListener('change', updateModel);
-    </script>
+    </script> -->
     <!--/ Partial Observation Grasps -->
+
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <!-- Diffusion Structure -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Diffusion Structure</h2>
+            <figure>
+              <img src="./static/image/Diffusion Structure.png" alt="Diffusion Structure">
+              <figcaption style="font-style: normal; font-size: 0.95em;">Overview of $\mathcal{D(R,O)}$ Grasp: We first pretrain the robot encoder with the proposed configuration-invariant
+                pretraining method. Then, we predict the $\mathcal{D(R,O)}$ representation between the robot and object point cloud. Finally, we
+                extract joint values from the $\mathcal{D(R,O)}$ representation.</figcaption>
+            </figure>
+          </div>
+        </div>
+        <!--/ Diffusion Structure -->
+      </div>
+    </section>
+
 
     <section class="section">
       <div class="container is-max-desktop">
