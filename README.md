@@ -1,1 +1,1 @@
-https://xhaol.github.io/bimdexgrasp/
+https://xhaol.github.io/bidexgrasp/
