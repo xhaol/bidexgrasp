@@ -297,7 +297,7 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column">
-            <h2 class="title is-3 has-text-centered">Training Dataset (Mesh vs. Partial Point Cloud)</h2>
+            <h2 class="title is-3 has-text-centered">Dataset for Traing Diffusion (Mesh vs. Partial Point Cloud)</h2>
           </div>
         </div>
 
@@ -305,27 +305,27 @@
           <div class="column is-one-third" style="display: flex; flex-direction: column; align-items: center;">
             <model-viewer
               id="trainingMeshViewer"
-              src="static/data/training_dataset/Bowl_mesh.glb"
+              src="static/data/training_data/DrinkingUtensil_mesh.glb"
               alt="Original Mesh Grasp"
               camera-controls
               auto-rotate
               auto-rotate-delay="1200"
               interaction-prompt-threshold="2000"
-              style="width: 220px; height: 220px; border: 3px solid #66c0ff; border-radius: 15px;">
+              style="width: 320px; height: 320px; border: 3px solid #66c0ff; border-radius: 15px;">
             </model-viewer>
-            <p style="font-size: 20px; font-weight: bold; margin-top: 10px;">Original Mesh</p>
+            <p style="font-size: 20px; font-weight: bold; margin-top: 10px;">Original Grasp Data</p>
           </div>
 
           <div class="column is-one-third" style="display: flex; flex-direction: column; align-items: center;">
             <model-viewer
               id="trainingPcViewer"
-              src="static/data/training_dataset/Bowl_pc.glb"
+              src="static/data/training_data/DrinkingUtensil_pc.glb"
               alt="Observed Partial Point Cloud"
               camera-controls
               auto-rotate
               auto-rotate-delay="1200"
               interaction-prompt-threshold="2000"
-              style="width: 220px; height: 220px; border: 3px solid #66c0ff; border-radius: 15px;">
+              style="width: 320px; height: 320px; border: 3px solid #66c0ff; border-radius: 15px;">
             </model-viewer>
             <p style="font-size: 20px; font-weight: bold; margin-top: 10px;">Partial Observation</p>
           </div>
@@ -336,7 +336,7 @@
             <div class="slider-container" style="text-align: center;">
               <div style="font-size: 20px; font-weight: bold; margin-bottom: 12px;">
                 Object:
-                <span id="trainingObjectLabel">Bowl</span>
+                <span id="trainingObjectLabel">Drinking Utensil</span>
               </div>
               <input type="range" id="trainingObjectSlider" min="0" max="7" value="0" style="width: 100%; height: 16px;">
             </div>
@@ -347,14 +347,14 @@
 
     <script>
       const trainingObjects = [
-        "Bowl",
-        "Camera",
-        "CellPhone",
-        "Detergent",
-        "FoodItem",
-        "Piano",
-        "Pizza",
-        "RubiksCube"
+        "DrinkingUtensil",
+        "Eraser",
+        "Ipod",
+        "MotorCycle",
+        "Plate",
+        "TissueBox",
+        "VideoGameController",
+        "Wallet"
       ];
 
       const trainingMeshViewer = document.getElementById('trainingMeshViewer');
@@ -370,8 +370,8 @@
         const displayName = objectName.replace(/([a-z])([A-Z])/g, '$1 $2');
 
         trainingLabel.textContent = displayName;
-        trainingMeshViewer.src = `static/data/training_dataset/${objectName}_mesh.glb`;
-        trainingPcViewer.src = `static/data/training_dataset/${objectName}_pc.glb`;
+        trainingMeshViewer.src = `static/data/training_data/${objectName}_mesh.glb`;
+        trainingPcViewer.src = `static/data/training_data/${objectName}_pc.glb`;
       }
 
       trainingSlider.addEventListener('input', updateTrainingModels);
