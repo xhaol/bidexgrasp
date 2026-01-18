@@ -408,87 +408,69 @@
 
     <section class="section">
       <div class="container is-max-desktop">
-        <div class="columns is-multiline video-gallery">
-          <div class="column is-one-third-desktop is-half-tablet">
+        <div class="video-carousel-container">
+          <div class="video-carousel-wrapper">
             <div class="video-card">
-              <video controls playsinline loop muted>
-                <source src="static/data/realworld/Bin.mp4" type="video/mp4">
+              <video id="realworld-video" controls playsinline loop muted>
+                <source id="realworld-video-source" src="static/data/realworld/Bottle.mp4" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
               <div class="video-meta">
-                <h3>Bin Pick-and-Place</h3>
-                <p>Stable lifting of an over-sized bin using cooperative wrist motion.</p>
+                <h3 id="realworld-video-title">Bottle</h3>
               </div>
             </div>
           </div>
-
-          <div class="column is-one-third-desktop is-half-tablet">
-            <div class="video-card">
-              <video controls playsinline loop muted>
-                <source src="static/data/realworld/Bottle.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-meta">
-                <h3>Bottle Handover</h3>
-                <p>Precise grasping around a slippery cylindrical bottle without collisions.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="column is-one-third-desktop is-half-tablet">
-            <div class="video-card">
-              <video controls playsinline loop muted>
-                <source src="static/data/realworld/Column.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-meta">
-                <h3>Column Stabilization</h3>
-                <p>Coordinated support on a tall column showcasing high-payload balancing.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="column is-one-third-desktop is-half-tablet">
-            <div class="video-card">
-              <video controls playsinline loop muted>
-                <source src="static/data/realworld/Drill.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-meta">
-                <h3>Drill Alignment</h3>
-                <p>Dexterous orientation of a power drill for tool-use readiness.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="column is-one-third-desktop is-half-tablet">
-            <div class="video-card">
-              <video controls playsinline loop muted>
-                <source src="static/data/realworld/Drill_Box.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-meta">
-                <h3>Drill + Box Packing</h3>
-                <p>Co-manipulation of the drill and its storage box for packaging.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="column is-one-third-desktop is-half-tablet">
-            <div class="video-card">
-              <video controls playsinline loop muted>
-                <source src="static/data/realworld/Nvidia_Box.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-meta">
-                <h3>NVIDIA Box Transport</h3>
-                <p>Wide-span grasp demonstrating large-object transport robustness.</p>
-              </div>
-            </div>
+          
+          <div class="carousel-controls">
+            <button id="prev-video-btn" class="carousel-btn">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span id="video-counter" class="video-counter">1 / 6</span>
+            <button id="next-video-btn" class="carousel-btn">
+              <i class="fas fa-chevron-right"></i>
+            </button>
           </div>
         </div>
       </div>
     </section>
+
+    <script>
+      const realworldVideos = [
+        { src: 'static/data/realworld/Bottle.mp4', title: 'Bottle' },
+        { src: 'static/data/realworld/Bin.mp4', title: 'Bin' },
+        { src: 'static/data/realworld/Column.mp4', title: '3D printed column' },
+        { src: 'static/data/realworld/Drill.mp4', title: 'Drill' },
+        { src: 'static/data/realworld/Drill_Box.mp4', title: 'Box1' },
+        { src: 'static/data/realworld/Nvidia_Box.mp4', title: 'Box2' }
+      ];
+
+      let currentVideoIndex = 0;
+
+      const videoElement = document.getElementById('realworld-video');
+      const videoSource = document.getElementById('realworld-video-source');
+      const videoTitle = document.getElementById('realworld-video-title');
+      const videoCounter = document.getElementById('video-counter');
+      const prevBtn = document.getElementById('prev-video-btn');
+      const nextBtn = document.getElementById('next-video-btn');
+
+      function updateVideo() {
+        const video = realworldVideos[currentVideoIndex];
+        videoSource.src = video.src;
+        videoTitle.textContent = video.title;
+        videoCounter.textContent = `${currentVideoIndex + 1} / ${realworldVideos.length}`;
+        videoElement.load();
+      }
+
+      prevBtn.addEventListener('click', () => {
+        currentVideoIndex = (currentVideoIndex - 1 + realworldVideos.length) % realworldVideos.length;
+        updateVideo();
+      });
+
+      nextBtn.addEventListener('click', () => {
+        currentVideoIndex = (currentVideoIndex + 1) % realworldVideos.length;
+        updateVideo();
+      });
+    </script>
     
     <!-- Video -->
     <!-- <section class="section">
