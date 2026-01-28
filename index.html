@@ -161,11 +161,12 @@
             <h2 class="title is-3">Abstract</h2>
             <div class="content has-text-justified">
               <p>
-                Dexterous grasping has advanced rapidly in recent years, yet bimanual manipulation for large‑scale objects remains underexplored due to the increased complexity of coordinating two hands while considering object geometry, environmental constraints, and potential hand‑hand conflicts. 
-                In this work, we propose an efficient method for generating high‑quality bimanual grasp datasets, which outperforms prior approaches in both generation speed and success rate. 
-                Using this pipeline, we generate and physically validate 5.3 million successful bimanual grasp pairs. 
-                Furthermore, we develop a diffusion‑based model trained on this synthetic dataset to infer feasible bimanual grasp poses from partial object point clouds. 
-                This model achieves a 80.7% success rate in simulator based on partial point cloud and 46.3% in real experiments.
+                Bimanual dexterous grasping remains challenging due to the difficulty of coordinating two hands and the lack of large-scale, high-quality datasets. In this work, we address these challenges with a data synthesis and learning-based framework. 
+                We first propose an efficient pipeline for large-scale bimanual grasp data synthesis by combining optimized single-hand grasps and validating them in physics-based simulation. Our method is over 100$\times$ faster than existing method like BimanGrasp while achieving a 18.15\% higher success rate. 
+                We released BiDexGrasp dataset containing 5.3 million verified bimanual grasps on 5k+ objects.
+                Building on this dataset, we train a diffusion-based bimanual grasp generation model BiDexGen to generate feasible bimanual grasp configurations directly from partial point cloud observations. 
+                To bridge the sim-to-real gap caused by incomplete and viewpoint-dependent perception, we introduce a contact-aware sampling strategy for training data processing that encourages grasp generation on visible and reachable object regions. 
+                BiDexGen achieves an 74.73\% success rate in simulation and 63.3\% on a real dual-arm robotic system. 
               </p>
             </div>
           </div>
@@ -176,10 +177,24 @@
 
     <section class="section">
       <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3 has-text-centered">Overview</h2>
+            <figure style="margin-top: 20px;">
+              <img src="./static/image/Overview.png" alt="Overview" style="width: 100%; max-width: 1100px;">
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section">
+      <div class="container is-max-desktop">
         <!-- Dataset Generation Pipeline -->
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
-            <h2 class="title is-3">Dataset Generation Pipeline</h2>
+            <h2 class="title is-3">Grasp Data Generation Pipeline</h2>
             <figure>
               <img src="./static/image/Dataset.png" alt="Dataset Generation Pipeline">
               <figcaption style="font-style: normal; font-size: 0.95em;"> </figcaption>
@@ -402,7 +417,7 @@
           <div class="column is-four-fifths">
             <h2 class="title is-3 has-text-centered">Real-World Experiments</h2>
             <figure style="margin-top: 20px;">
-              <img src="./static/image/Overview.png" alt="Real-World Experiments Overview" style="width: 100%; max-width: 1100px;">
+              <img src="" alt="Real-World Experiments Overview" style="width: 100%; max-width: 1100px;">
             </figure>
           </div>
         </div>
@@ -415,23 +430,26 @@
           <div class="video-carousel-wrapper">
             <div class="video-card">
               <video id="realworld-video" controls playsinline loop muted>
-                <source id="realworld-video-source" src="static/data/realworld/Drill_Box.mp4" type="video/mp4">
+                <source id="realworld-video-source" src="static/data/realworld/Bottle.mp4" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
               <div class="video-meta">
-                <h3 id="realworld-video-title">Long Box</h3>
+                <h3 id="realworld-video-title">Bottle</h3>
               </div>
             </div>
           </div>
           
           <div class="carousel-controls">
-            <div class="slider-container" style="text-align: center;">
-              <div style="font-size: 20px; font-weight: bold; margin-bottom: 12px;">
-                Object:
-                <span id="realworld-object-label">Long Box</span>
-              </div>
-              <input type="range" id="realworld-slider" min="0" max="5" value="0" style="width: 100%; height: 16px;">
+            <button id="prev-video-btn" class="carousel-btn" aria-label="Previous real-world video">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="carousel-label">
+              <div class="carousel-label-title">Object</div>
+              <div class="carousel-label-value" id="realworld-object-label">Bottle</div>
             </div>
+            <button id="next-video-btn" class="carousel-btn" aria-label="Next real-world video">
+              <i class="fas fa-chevron-right"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -439,33 +457,41 @@
 
     <script>
       const realworldVideos = [
-        { src: 'static/data/realworld/Drill_Box.mp4', title: 'Long Box' },
         { src: 'static/data/realworld/Bottle.mp4', title: 'Bottle' },
+        { src: 'static/data/realworld/Drill_Box.mp4', title: 'Long Box' },
         { src: 'static/data/realworld/Bin.mp4', title: 'Bin' },
         { src: 'static/data/realworld/Column.mp4', title: '3D printed column' },
         { src: 'static/data/realworld/Drill.mp4', title: 'Drill' },
         { src: 'static/data/realworld/Nvidia_Box.mp4', title: 'Fat Box' }
       ];
 
+      let currentVideoIndex = 0;
+
       const videoElement = document.getElementById('realworld-video');
       const videoSource = document.getElementById('realworld-video-source');
       const videoTitle = document.getElementById('realworld-video-title');
-      const realworldSlider = document.getElementById('realworld-slider');
       const realworldLabel = document.getElementById('realworld-object-label');
-
-      realworldSlider.max = realworldVideos.length - 1;
+      const prevBtn = document.getElementById('prev-video-btn');
+      const nextBtn = document.getElementById('next-video-btn');
 
       function updateRealworldVideo() {
-        const videoIndex = parseInt(realworldSlider.value, 10);
-        const video = realworldVideos[videoIndex];
-        
+        const video = realworldVideos[currentVideoIndex];
         videoSource.src = video.src;
         videoTitle.textContent = video.title;
         realworldLabel.textContent = video.title;
         videoElement.load();
       }
 
-      realworldSlider.addEventListener('input', updateRealworldVideo);
+      prevBtn.addEventListener('click', () => {
+        currentVideoIndex = (currentVideoIndex - 1 + realworldVideos.length) % realworldVideos.length;
+        updateRealworldVideo();
+      });
+
+      nextBtn.addEventListener('click', () => {
+        currentVideoIndex = (currentVideoIndex + 1) % realworldVideos.length;
+        updateRealworldVideo();
+      });
+
       updateRealworldVideo();
     </script>
     
